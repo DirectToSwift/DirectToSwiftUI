@@ -38,16 +38,23 @@ public struct D2SNavigationLink<Label, Destination>: View
   public var body: some View {
     Group {
       if isActive != nil {
-        NavigationLink(destination: destination.ruleContext(context),
+        NavigationLink(destination: destination
+                                      .environmentObject(context.object)
+                                      .ruleContext(context),
                        isActive: isActive!)
         {
           label
+            .environmentObject(context.object)
             .ruleContext(context)
         }
       }
       else {
-        NavigationLink(destination: destination.ruleContext(context)) {
+        NavigationLink(destination: destination
+                                      .environmentObject(context.object)
+                                      .ruleContext(context))
+        {
           label
+            .environmentObject(context.object)
             .ruleContext(context)
         }
       }
