@@ -10,9 +10,7 @@ import struct SwiftUIRules.RuleContext
 import SwiftUI
 
 public struct D2SMainView: View {
-  
-  // TODO: needs login state and async fetches
-  
+    
   @ObservedObject private var viewModel : D2SRuleEnvironment
   
   public init(adaptor: Adaptor, ruleModel: RuleModel) {
