@@ -42,11 +42,13 @@ public struct D2SNavigationLink<Label, Destination>: View
                        isActive: isActive!)
         {
           label
+            .ruleContext(context)
         }
       }
       else {
         NavigationLink(destination: destination.ruleContext(context)) {
           label
+            .ruleContext(context)
         }
       }
     }
