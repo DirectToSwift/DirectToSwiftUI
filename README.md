@@ -7,7 +7,7 @@
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![iOS](https://img.shields.io/badge/os-iOS-green.svg?style=flat)
 ![watchOS](https://img.shields.io/badge/os-watchOS-green.svg?style=flat)
-![Travis](https://api.travis-ci.org/DirectToSwift/DirectToSwiftUI.svg?branch=develop&style=flat)
+![Travis](https://api.travis-ci.org/DirectToSwift/DirectToSwiftUI.svg?branch=master&style=flat)
 
 _Going fully declarative_: Direct to SwiftUI.
 
