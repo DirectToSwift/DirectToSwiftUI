@@ -68,7 +68,9 @@ public extension BasicLook.PageWrapper.MasterDetail.EntityMasterDetailPage {
                 EntityName()
                 Spacer()
               }
-              .environment(\.entity, { self.model[entity: name]! }())
+              .environment(\.entity, {
+                self.model[entity: name] ?? D2SKeys.entity.defaultValue
+              }())
               .frame(maxWidth: .infinity, maxHeight: .infinity)
               .foregroundColor(self.colorForEntityName(name))
               .onTapGesture {

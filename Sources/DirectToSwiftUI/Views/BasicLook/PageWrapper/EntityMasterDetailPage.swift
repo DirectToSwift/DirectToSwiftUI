@@ -23,7 +23,13 @@ public extension BasicLook.PageWrapper.MasterDetail {
     private var selectedEntity: Entity? {
       guard let entityName = selectedEntityName else { return nil }
       guard let entity = model[entity: entityName] else {
-        fatalError("did not find entity: \(entityName) in \(model)")
+        #if os(macOS)
+          globalD2SLogger.error("did not find entity:", entityName,
+                                "in:", model)
+          return nil
+        #else
+          fatalError("did not find entity: \(entityName) in \(model)")
+        #endif
       }
       return entity
     }
@@ -71,7 +77,8 @@ public extension BasicLook.PageWrapper.MasterDetail {
           }
           else {
             EntityContent()
-              .environment(\.entity, selectedEntity!)
+              .environment(\.entity,
+                           selectedEntity ?? D2SKeys.entity.defaultValue)
           }
         }
         .frame(minWidth: 400 as CGFloat, idealWidth: 600 as CGFloat,

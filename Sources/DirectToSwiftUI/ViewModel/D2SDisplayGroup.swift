@@ -317,7 +317,13 @@ fileprivate func buildInitialFetchSpec<Object: ActiveRecordType>
   if (fs.sortOrderings?.count ?? 0) == 0 {
     fs.sortOrderings = dataSource.entity?.d2s.defaultSortOrderings ?? []
   }
-  assert(fs.sortOrderings != nil && !(fs.sortOrderings?.isEmpty ?? true))
+  #if os(macOS)
+    if !(fs.sortOrderings != nil && !(fs.sortOrderings?.isEmpty ?? true)) {
+      globalD2SLogger.error("got no sort orderings for fetchspec:", fs)
+    }
+  #else
+    assert(fs.sortOrderings != nil && !(fs.sortOrderings?.isEmpty ?? true))
+  #endif
   
   if let aux = auxiliaryQualifier {
     fs.qualifier = aux.and(fs.qualifier)
