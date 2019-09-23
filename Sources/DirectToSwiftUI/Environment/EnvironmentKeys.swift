@@ -27,14 +27,14 @@ public extension D2SKeys {
 
   struct debug: DynamicEnvironmentKey {
     #if DEBUG
-      public static var defaultValue = true
+      public static let defaultValue = true
     #else
-      public static var defaultValue = false
+      public static let defaultValue = false
     #endif
   }
 
   struct database: DynamicEnvironmentKey {
-    public static var defaultValue : Database = D2SDummyDatabase()
+    public static let defaultValue : Database = D2SDummyDatabase()
   }
   
   struct firstTask: DynamicEnvironmentKey {
@@ -51,7 +51,7 @@ public extension D2SKeys {
   struct object: DynamicEnvironmentKey {
     // TBD: This one should really be an EnvironmentObject, but how
     //      would we do this? More in the keypath \.object.
-    public static var defaultValue : OActiveRecord = .init()
+    public static let defaultValue : OActiveRecord = .init()
   }
 
   struct propertyKey: DynamicEnvironmentKey {
@@ -65,11 +65,11 @@ public extension D2SKeys {
   // MARK: - Model
   
   struct model: DynamicEnvironmentKey {
-    public static var defaultValue : Model = D2SDefaultModel()
+    public static let defaultValue : Model = D2SDefaultModel()
   }
 
   struct entity: DynamicEnvironmentKey {
-    public static var defaultValue : Entity = D2SDefaultEntity.shared
+    public static let defaultValue : Entity = D2SDefaultEntity.shared
   }
   
   /**
@@ -80,7 +80,7 @@ public extension D2SKeys {
    * If that also fails, the default dummy attribute is returned.
    */
   struct attribute: DynamicEnvironmentKey {
-    public static var  defaultValue : Attribute = D2SDefaultAttribute()
+    public static let defaultValue : Attribute = D2SDefaultAttribute()
   }
   
   /**
@@ -91,7 +91,7 @@ public extension D2SKeys {
    * If that also fails, the default dummy relationship is returned.
    */
   struct relationship: DynamicEnvironmentKey {
-    public static var  defaultValue : Relationship = D2SDefaultRelationship()
+    public static let defaultValue : Relationship = D2SDefaultRelationship()
   }
 
   // MARK: - Derived
