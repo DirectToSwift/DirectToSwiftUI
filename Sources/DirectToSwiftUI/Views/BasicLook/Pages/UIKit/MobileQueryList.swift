@@ -54,7 +54,8 @@ public extension BasicLook.Page.UIKit {
       @Environment(\.debugComponent)        private var debugComponent
       @Environment(\.entity)                private var entity
       @Environment(\.initialPropertyValues) private var initialPropertyValues
-      
+      @Environment(\.creationTimestampPropertyKey) private var createTS
+
       private var sortButtons : [ ActionSheet.Button ] {
         // FIXME: limit in size
         // FIXME: use "displayPropertyKeys" or something
@@ -129,6 +130,11 @@ public extension BasicLook.Page.UIKit {
         for ( k, v ) in initialPropertyValues {
           try? KeyValueCoding.takeValue(v, forKeyPath: k, inObject: object)
         }
+        
+        if let pkey = createTS {
+          try? KeyValueCoding.takeValue(Date(), forKey: pkey, inObject: object)
+        }
+        
         return object
       }
       

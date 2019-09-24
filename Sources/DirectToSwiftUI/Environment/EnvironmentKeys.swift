@@ -143,6 +143,12 @@ public extension D2SKeys {
   struct initialPropertyValues: DynamicEnvironmentKey {
     public static let defaultValue : [ String : Any? ] = [:]
   }
+  struct creationTimestampPropertyKey: DynamicEnvironmentKey {
+    public static let defaultValue : String? = nil
+  }
+  struct updateTimestampPropertyKey: DynamicEnvironmentKey {
+    public static let defaultValue : String? = nil
+  }
 
   /**
    * The entities which are being displayed on a page.
