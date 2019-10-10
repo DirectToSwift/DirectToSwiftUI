@@ -12,7 +12,7 @@ import struct SwiftUI.Binding
 public extension Binding {
   
   /**
-   * Creates a String binding form an arbitrary value binding which pipes the
+   * Creates a String binding from an arbitrary value binding which pipes the
    * value binding through a formatter.
    *
    * This is a workaround to fix the `TextField` not doing the same when a
