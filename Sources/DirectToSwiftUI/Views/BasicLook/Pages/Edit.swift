@@ -49,8 +49,9 @@ public extension BasicLook.Page {
         
         @EnvironmentObject private var object : OActiveRecord
 
-        @Environment(\.presentationMode) private var presentationMode
-        
+        @Environment(\.presentationMode)           private var presentationMode
+        @Environment(\.updateTimestampPropertyKey) private var updateTS
+
         @State private var lastError      : Swift.Error?
         @State private var isShowingError = false
         
@@ -74,6 +75,10 @@ public extension BasicLook.Page {
           guard hasChanges else { return goBack() }
           
           do {
+            if let pkey = updateTS {
+              try? KeyValueCoding.takeValue(Date(), forKey: pkey,
+                                            inObject: object)
+            }
             try object.save()
             goBack()
           }

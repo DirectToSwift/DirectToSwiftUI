@@ -63,6 +63,8 @@ D2S has quiet a set of builtin environment keys, including:
   - `platform`
   - `debug`
   - `initialPropertyValues`
+  - `creationTimestampPropertyKey`
+  - `updateTimestampPropertyKey`
 
 Checkout the `D2SKeys` for the full set.
 

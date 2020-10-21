@@ -86,7 +86,6 @@ extension String {
       return needle.range(of: needle)
     }
 
-    let len  = count
     let slen = needle.count
     let sc   = needle.first!
 

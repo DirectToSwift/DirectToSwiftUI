@@ -414,7 +414,16 @@ public extension DynamicEnvironmentPathes {
     set { self[dynamic: D2SKeys.initialPropertyValues.self] = newValue }
     get { self[dynamic: D2SKeys.initialPropertyValues.self] }
   }
-  
+
+  var creationTimestampPropertyKey : String? {
+    set { self[dynamic: D2SKeys.creationTimestampPropertyKey.self] = newValue }
+    get { self[dynamic: D2SKeys.creationTimestampPropertyKey.self] }
+  }
+  var updateTimestampPropertyKey : String? {
+    set { self[dynamic: D2SKeys.updateTimestampPropertyKey.self] = newValue }
+    get { self[dynamic: D2SKeys.updateTimestampPropertyKey.self] }
+  }
+
   /**
    * If you implement a login page, you can assign a value to the `user`
    * environment. And then adjust other environments based on that,

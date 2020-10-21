@@ -43,11 +43,13 @@ public final class D2SRuleEnvironment: ObservableObject {
     ruleContext[D2SKeys.model] = model
   }
   
+  private var modelFetch : AnyCancellable?
+  
   public func resume() {
     guard databaseModel == nil else { return }
     
     // TODO: setup timer to refetch and compare model tag
-    _ = adaptor.fetchModel(on: D2SFetchQueue)
+    modelFetch = adaptor.fetchModel(on: D2SFetchQueue)
       .map { ( model, tag ) in
         FancyModelMaker(model: model).fancyfyModel()
       }
@@ -55,6 +57,7 @@ public final class D2SRuleEnvironment: ObservableObject {
       .catch { ( error : Swift.Error ) -> Just<Model> in
         self.error = error
         globalD2SLogger.error("failed to fetch model:", error)
+        self.modelFetch = nil
         return Just(Model(entities: [
           ModelEntity(name: "Could not load model.")
         ]))
@@ -64,6 +67,7 @@ public final class D2SRuleEnvironment: ObservableObject {
           self.adaptor.model = model
         }
         self.setupWithModel(model)
+        self.modelFetch = nil
       }
   }
 }
