@@ -120,7 +120,8 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
   
   private func integrateCount(_ count: Int) {
     assert(_dispatchPreconditionTest(.onQueue(.main)))
-    
+    self.countFetchToken = nil
+
     #if false // nope, a fetch count means we rebuild!
       if count == results.count { return } // all good already
     #endif
@@ -138,11 +139,14 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
     results.clearOrderAndApplyNewCount(count)
   }
   
+  private var countFetchToken : AnyCancellable?
+  
   private func fetchCount(_ fetchSpecification: FetchSpecification) {
     let fs = fetchSpecification // has to be done, can't use inside fetchCount?
-    _ = dataSource.fetchCount(fs, on: D2SFetchQueue)
+    countFetchToken = dataSource.fetchCount(fs, on: D2SFetchQueue)
       .receive(on: RunLoop.main)
       .catch { ( error : Swift.Error ) -> Just<Int> in
+        self.countFetchToken = nil
         self.handleError(error)
         return Just(0)
       }
@@ -196,8 +200,13 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
     self.results = newResults
   }
   
-  private struct Query: Equatable {
+  private final class Query: Equatable {
     let range : Range<Int>
+    var token : AnyCancellable?
+    init(range: Range<Int>) { self.range = range }
+    static func ==(lhs: Query, rhs: Query) -> Bool {
+      return lhs.range == rhs.range
+    }
   }
   private var activeQueries = [ Query ]()
   
@@ -242,7 +251,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
     let query = Query(range: fetchRange)
     activeQueries.append(query) // keep it alive
     
-    _ = dataSource.fetchGlobalIDs(fs, on: D2SFetchQueue)
+    query.token = dataSource.fetchGlobalIDs(fs, on: D2SFetchQueue)
       .receive(on: RunLoop.main)
       .flatMap { ( globalIDs ) -> AnyPublisher<[ Object ], Error> in
         var missingGIDs = Set<GlobalID>()
