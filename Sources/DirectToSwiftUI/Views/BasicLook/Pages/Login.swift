@@ -63,7 +63,6 @@ public extension BasicLook.Page {
     
     private func login() {
       // FIXME: Make async, add spinner, all the good stuff ;-)
-      let pwd = password
       defer { password = "" }
       
       loginUser = nil
