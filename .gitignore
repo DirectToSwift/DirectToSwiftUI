@@ -71,4 +71,5 @@ fastlane/test_output
 .DS_Store
 Package.resolved
 .docker.build
+.swiftpm
 
