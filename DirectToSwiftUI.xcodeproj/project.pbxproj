@@ -945,7 +945,7 @@
 		E8F4DF332332510C0077B171 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = "ZeeZide GmbH";
 				TargetAttributes = {
 					E8F4DF3A2332510C0077B171 = {
