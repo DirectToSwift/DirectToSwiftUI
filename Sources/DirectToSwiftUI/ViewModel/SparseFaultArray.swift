@@ -62,7 +62,8 @@ public struct SparseFaultArray<Object: AnyObject, Resolver: D2SFaultResolver> {
     assert(knownObjects.count <= count)
     assert(knownObjects.count > position)
   }
-  
+
+  #if false // no index GIDs anymore
   @inline(__always)
   fileprivate func makeGlobalID(for index: Int) -> GlobalID {
     IndexGlobalID.make(index)
@@ -71,6 +72,7 @@ public struct SparseFaultArray<Object: AnyObject, Resolver: D2SFaultResolver> {
   fileprivate func makeFault(for index: Int) -> Element {
     return D2SFault(makeGlobalID(for: index), resolver!)
   }
+  #endif
   
   public subscript(globalID: GlobalID) -> Object? {
     return objects[globalID]
@@ -126,39 +128,5 @@ extension SparseFaultArray {
     if case .object(let gid, let object) = fault {
       objects[gid] = object
     }
-  }
-}
-
-internal final class IndexGlobalID : GlobalID {
-  
-  private static let sharedIndexGIDs : [ IndexGlobalID ] = { // prealloc some
-    (0...50).map(IndexGlobalID.init)
-  }()
-  
-  // TBD: we _could_ scope by something.
-  public let index : Int
-  
-  @inlinable
-  public static func make(_ index: Int) -> IndexGlobalID {
-    return index < IndexGlobalID.sharedIndexGIDs.count
-      ? IndexGlobalID.sharedIndexGIDs[index]
-      : IndexGlobalID(index)
-  }
-  
-  private init(_ index: Int) {
-    self.index = index
-  }
-  
-  override func isEqual(to object: Any?) -> Bool {
-    guard let gid = object as? IndexGlobalID else { return false }
-    return gid == self
-  }
-  
-  override func hash(into hasher: inout Hasher) {
-    index.hash(into: &hasher)
-  }
-  
-  public static func ==(lhs: IndexGlobalID, rhs: IndexGlobalID) -> Bool {
-    return lhs.index == rhs.index
   }
 }

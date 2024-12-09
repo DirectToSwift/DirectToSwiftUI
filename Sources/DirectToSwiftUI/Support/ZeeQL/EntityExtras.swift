@@ -2,7 +2,7 @@
 //  ZeeQLExtras.swift
 //  ApacheExpressAdmin
 //
-//  Copyright © 2017-2019 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2017-2024 ZeeZide GmbH. All rights reserved.
 //
 
 import protocol ZeeQL.Entity
@@ -192,14 +192,13 @@ extension Entity {
    * the property keys.
    */
   func prefetchPathesForPropertyKeys<S: Sequence>(_ propertyKeys: S)
-    -> [ String ]? where S.Element == String
+    -> [ String ] where S.Element == String
   {
     var pathes = Set<String>()
     for propertyKey in propertyKeys {
       insertPrefetchPathesForPropertyKey(propertyKey, into: &pathes)
     }
-    if pathes.isEmpty { return nil }
-    return Array(pathes)
+    return pathes.sorted()
   }
 
   private func insertPrefetchPathesForPropertyKey(_ propertyKey: String,
