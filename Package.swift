@@ -18,9 +18,9 @@ let package = Package(
     .package(url: "https://github.com/DirectToSwift/SwiftUIRules.git",
              from: "0.2.0"),
     .package(url: "https://github.com/ZeeQL/ZeeQL3.git",
-             from: "0.9.4"),
+             "0.9.4"..."0.9.8"),
     .package(url: "https://github.com/ZeeQL/ZeeQL3Combine.git",
-             from: "0.1.5")
+             "0.1.5"..."0.1.5")
   ],
   
   targets: [

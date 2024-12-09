@@ -11,6 +11,9 @@
 
 _Going fully declarative_: Direct to SwiftUI.
 
+Note(2024-12-09): This doesn't currently build against the current ZeeQL3
+                  anymore.
+
 **Direct to SwiftUI**
 is an adaption of an old 
 [WebObjects](https://en.wikipedia.org/wiki/WebObjects) 
