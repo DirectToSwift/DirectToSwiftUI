@@ -19,7 +19,7 @@ extension RuleClosurePredicate: Qualifier {
 }
 
 extension RuleClosurePredicate: QualifierEvaluation {
-  public func evaluateWith(object: Any?) -> Bool {
+  public func evaluate(with object: Any?) -> Bool {
     guard let ruleContext = object as? RuleContext else { return false }
     return evaluate(in: ruleContext)
   }

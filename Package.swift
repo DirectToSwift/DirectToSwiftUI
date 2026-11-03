@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:6.0
 
 import PackageDescription
 
@@ -7,7 +7,7 @@ let package = Package(
   name: "DirectToSwiftUI",
   
   platforms: [
-    .macOS(.v10_15), .iOS(.v13), .watchOS(.v6)
+    .macOS(.v12), .iOS(.v15), .watchOS(.v9)
   ],
   
   products: [
@@ -18,13 +18,20 @@ let package = Package(
     .package(url: "https://github.com/DirectToSwift/SwiftUIRules.git",
              from: "0.2.0"),
     .package(url: "https://github.com/ZeeQL/ZeeQL3.git",
-             from: "0.9.16"),
+             from: "0.10.1"),
     .package(url: "https://github.com/ZeeQL/ZeeQL3Combine.git",
-             from: "0.2.0")
+             from: "0.2.1")
   ],
   
   targets: [
     .target(name: "DirectToSwiftUI", 
-            dependencies: [ "SwiftUIRules", "ZeeQL", "ZeeQLCombine" ])
-  ]
+            dependencies: [
+              "SwiftUIRules",
+              .product(name: "ZeeQL",        package: "ZeeQL3"),
+              .product(name: "ZeeQLCombine", package: "ZeeQL3Combine")
+            ])
+  ],
+  
+  // TODO: Port to the Swift 6 language mode (strict concurrency checks).
+  swiftLanguageModes: [ .v5 ]
 )

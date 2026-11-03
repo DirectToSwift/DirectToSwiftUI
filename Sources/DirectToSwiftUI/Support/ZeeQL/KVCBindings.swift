@@ -20,7 +20,7 @@ public extension KeyValueCoding { // bindings for KVC keys
   static func binding(_ key: String, for object: Any?) -> Binding<Any?> {
     if let object = object {
       return Binding<Any?>(get: {
-        KeyValueCoding.value(forKey: key, inObject: object)
+        KeyValueCoding.valueForKey(key, inObject: object)
       }) {
         newValue in
         do {
@@ -46,7 +46,7 @@ public extension KeyValueCoding { // bindings for KVC keys
               -> Binding<Any?>
   {
     return Binding<Any?>(get: {
-      object.value(forKey: key)
+      object.valueForKey(key)
     }) {
       newValue in
       do {

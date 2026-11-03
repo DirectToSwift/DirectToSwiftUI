@@ -15,8 +15,8 @@ extension EnvironmentValues: KeyValueCodingType {
    * SwiftUI.EnvironmentValues dispatches KVC calls to its attached
    * `ruleContext`.
    */
-  public func value(forKey k: String) -> Any? {
-    return ruleContext.value(forKey: k)
+  public func valueForKey(_ k: String) -> Any? {
+    return ruleContext.valueForKey(k)
   }
 }
 
@@ -29,7 +29,7 @@ extension RuleContext: KeyValueCodingType {
    * Users can expose additional `DynamicEnvironmentKey` via KVC using the
    * `D2SContextKVC.expose()` static function.
    */
-  public func value(forKey k: String) -> Any? {
+  public func valueForKey(_ k: String) -> Any? {
     guard let entry = D2SContextKVC.kvcToEnvKey[k] else { return nil }
     return entry.value(self)
   }

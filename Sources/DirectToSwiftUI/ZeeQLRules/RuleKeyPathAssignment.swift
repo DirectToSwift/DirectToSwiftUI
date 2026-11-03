@@ -55,6 +55,6 @@ public struct RuleKeyPathAssignment<K: DynamicEnvironmentKey>
   }
 
   public func fireInContext(_ context: RuleContext) -> Any? {
-    return KeyValueCoding.value(forKeyPath: keyPath, inObject: context)
+    return KeyValueCoding.valueForKeyPath(keyPath, inObject: context)
   }
 }

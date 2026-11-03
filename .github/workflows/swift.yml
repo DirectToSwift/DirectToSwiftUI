@@ -20,3 +20,13 @@ jobs:
         run: swift build -c debug
       - name: Build Swift Release Package
         run: swift build -c release
+      - name: Build Xcode Project for iOS
+        run: >-
+          xcodebuild -project DirectToSwiftUI.xcodeproj
+          -scheme DirectToSwiftUI-Mobile -destination generic/platform=iOS
+          -configuration Debug CODE_SIGNING_ALLOWED=NO
+      - name: Build Xcode Project for watchOS
+        run: >-
+          xcodebuild -project DirectToSwiftUI.xcodeproj
+          -scheme DirectToSwiftUI-Watch -destination generic/platform=watchOS
+          -configuration Debug CODE_SIGNING_ALLOWED=NO

@@ -91,7 +91,7 @@ extension Entity {
         map[name] = pat
       }
       q = or(q, qualifierToMatchAnyValue(
-        map, pat.isMixedCase ? .Like : .CaseInsensitiveLike)
+        map, pat.isMixedCase ? .like : .caseInsensitiveLike)
       )
     }
     
@@ -100,7 +100,7 @@ extension Entity {
       for name in numberAttributeNames {
         map[name] = numberValue
       }
-      q = or(q, qualifierToMatchAnyValue(map, .EqualTo))
+      q = or(q, qualifierToMatchAnyValue(map, .equalTo))
     }
     
     return q

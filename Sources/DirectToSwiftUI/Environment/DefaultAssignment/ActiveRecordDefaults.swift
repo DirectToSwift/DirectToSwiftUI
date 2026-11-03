@@ -38,7 +38,7 @@ public extension ActiveRecord {
       
       func string(for attribute: Attribute?) -> String? {
         guard let attribute = attribute else { return nil }
-        guard let value = object.value(forKey: attribute.name) else { return nil }
+        guard let value = object.valueForKey(attribute.name) else { return nil }
         guard let s = value as? String else { return nil }
         guard !s.isEmpty else { return nil }
         return s
@@ -64,7 +64,7 @@ public extension ActiveRecord {
       // Fallback to primary key, e.g.: `Film: 10`
       
       if let pkey = entity.primaryKeyAttributeNames?.first,
-         let value = object.value(forKey: pkey)
+         let value = object.valueForKey(pkey)
       {
         return "\(entity.name): \(value)"
       }

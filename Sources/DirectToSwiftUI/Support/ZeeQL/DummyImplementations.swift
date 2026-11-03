@@ -46,7 +46,9 @@ internal final class D2SDefaultEntity: Entity {
 }
 
 internal final class D2SDefaultAttribute: Attribute {
-  var name: String { "" }
+  var name      : String           { ""  }
+  var userData  : [ String : Any ] { [:] }
+  var elementID : String?          { nil }
 }
 
 internal final class D2SDefaultRelationship: Relationship {

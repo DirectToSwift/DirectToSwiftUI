@@ -62,8 +62,7 @@ public struct SparseFaultArray<Object: AnyObject, Resolver: D2SFaultResolver> {
     assert(knownObjects.count <= count)
     assert(knownObjects.count > position)
   }
-
-  #if false // no index GIDs anymore
+  
   @inline(__always)
   fileprivate func makeGlobalID(for index: Int) -> GlobalID {
     IndexGlobalID.make(index)
@@ -72,7 +71,6 @@ public struct SparseFaultArray<Object: AnyObject, Resolver: D2SFaultResolver> {
   fileprivate func makeFault(for index: Int) -> Element {
     return D2SFault(makeGlobalID(for: index), resolver!)
   }
-  #endif
   
   public subscript(globalID: GlobalID) -> Object? {
     return objects[globalID]
@@ -128,5 +126,22 @@ extension SparseFaultArray {
     if case .object(let gid, let object) = fault {
       objects[gid] = object
     }
+  }
+}
+
+/// `GlobalID`s which refer to a position in the result set, not to a record.
+internal enum IndexGlobalID {
+  
+  // TBD: we _could_ scope by something.
+  private static let entityName = "_D2SIndex"
+  
+  static func make(_ index: Int) -> GlobalID {
+    return GlobalID(entityName: entityName, value: index)
+  }
+  
+  static func index(of globalID: GlobalID) -> Int? {
+    guard globalID.entityName == entityName,
+          case .int(let index) = globalID.value else { return nil }
+    return index
   }
 }
