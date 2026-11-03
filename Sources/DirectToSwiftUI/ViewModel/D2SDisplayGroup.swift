@@ -46,7 +46,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
       guard oldValue !== sortAttribute else { return }
       if let newValue = sortAttribute {
         self.fetchSpecification.sortOrderings = [
-          SortOrdering(key: newValue.name, selector: .CompareAscending)
+          SortOrdering(key: newValue.name, selector: .ascending)
         ]
       }
       else {
@@ -227,8 +227,8 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
   
   public func resolveFaultWithID(_ gid: GlobalID) {
     // Yeah, we are just prepping things for the real imp using regular GIDs
-    if let indexGID = gid as? IndexGlobalID {
-      return resolveFault(at: indexGID.index)
+    if let index = IndexGlobalID.index(of: gid) {
+      return resolveFault(at: index)
     }
     
     globalD2SLogger.error("TODO: resolve fault w/ GID:", gid)
@@ -246,7 +246,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
     // TODO: add .range operator! (with closed, open, all!)
     let entity = fetchSpecification.entity ?? dataSource.entity
     let fs     = fetchSpecification.range(fetchRange)
-    assert(fs.sortOrderings != nil && !(fs.sortOrderings?.isEmpty ?? true))
+    assert(!fs.sortOrderings.isEmpty)
     
     let query = Query(range: fetchRange)
     activeQueries.append(query) // keep it alive
@@ -323,15 +323,15 @@ fileprivate func buildInitialFetchSpec<Object: ActiveRecordType>
   }()
   
   // We NEED a sort ordering (unless we prefetch all IDs)
-  if (fs.sortOrderings?.count ?? 0) == 0 {
+  if fs.sortOrderings.isEmpty {
     fs.sortOrderings = dataSource.entity?.d2s.defaultSortOrderings ?? []
   }
   #if os(macOS)
-    if !(fs.sortOrderings != nil && !(fs.sortOrderings?.isEmpty ?? true)) {
+    if fs.sortOrderings.isEmpty {
       globalD2SLogger.error("got no sort orderings for fetchspec:", fs)
     }
   #else
-    assert(fs.sortOrderings != nil && !(fs.sortOrderings?.isEmpty ?? true))
+    assert(!fs.sortOrderings.isEmpty)
   #endif
   
   if let aux = auxiliaryQualifier {

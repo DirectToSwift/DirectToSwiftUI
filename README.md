@@ -3,16 +3,12 @@
        align="right" width="128" height="128" />
 </h2>
 
-![Swift5.1](https://img.shields.io/badge/swift-5.1-blue.svg)
+![Swift6](https://img.shields.io/badge/swift-6-blue.svg)
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![iOS](https://img.shields.io/badge/os-iOS-green.svg?style=flat)
 ![watchOS](https://img.shields.io/badge/os-watchOS-green.svg?style=flat)
-![Travis](https://api.travis-ci.org/DirectToSwift/DirectToSwiftUI.svg?branch=develop&style=flat)
 
 _Going fully declarative_: Direct to SwiftUI.
-
-Note(2024-12-09): This doesn't currently build against the current ZeeQL3
-                  anymore.
 
 **Direct to SwiftUI**
 is an adaption of an old 
@@ -39,12 +35,9 @@ can be found over here:
 
 ## Requirements
 
-Direct to SwiftUI requires an environment capable to run SwiftUI.
-That is: macOS Catalina, iOS 13 or watchOS 6.
-In combination w/ Xcode 11.
-
-Note that you can run iOS 13/watchOS 6 apps on Mojave in the emulator,
-so that is fine as well.
+Direct to SwiftUI requires Swift 6 or later and an environment capable to run
+SwiftUI.
+That is: macOS 12, iOS 15 or watchOS 9.
 
 ## Using the Package
 

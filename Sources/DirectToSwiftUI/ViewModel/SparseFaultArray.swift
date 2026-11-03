@@ -129,36 +129,19 @@ extension SparseFaultArray {
   }
 }
 
-internal final class IndexGlobalID : GlobalID {
-  
-  private static let sharedIndexGIDs : [ IndexGlobalID ] = { // prealloc some
-    (0...50).map(IndexGlobalID.init)
-  }()
+/// `GlobalID`s which refer to a position in the result set, not to a record.
+internal enum IndexGlobalID {
   
   // TBD: we _could_ scope by something.
-  public let index : Int
+  private static let entityName = "_D2SIndex"
   
-  @inlinable
-  public static func make(_ index: Int) -> IndexGlobalID {
-    return index < IndexGlobalID.sharedIndexGIDs.count
-      ? IndexGlobalID.sharedIndexGIDs[index]
-      : IndexGlobalID(index)
+  static func make(_ index: Int) -> GlobalID {
+    return GlobalID(entityName: entityName, value: index)
   }
   
-  private init(_ index: Int) {
-    self.index = index
-  }
-  
-  override func isEqual(to object: Any?) -> Bool {
-    guard let gid = object as? IndexGlobalID else { return false }
-    return gid == self
-  }
-  
-  override func hash(into hasher: inout Hasher) {
-    index.hash(into: &hasher)
-  }
-  
-  public static func ==(lhs: IndexGlobalID, rhs: IndexGlobalID) -> Bool {
-    return lhs.index == rhs.index
+  static func index(of globalID: GlobalID) -> Int? {
+    guard globalID.entityName == entityName,
+          case .int(let index) = globalID.value else { return nil }
+    return index
   }
 }

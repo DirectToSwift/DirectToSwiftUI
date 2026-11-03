@@ -26,7 +26,7 @@ public final class D2SToOneFetch: ObservableObject {
     self.propertyKey = propertyKey
     
     func lookup(_ kp: String, in object: OActiveRecord) -> OActiveRecord? {
-      KeyValueCoding.value(forKeyPath: kp, inObject: object)
+      KeyValueCoding.valueForKeyPath(kp, inObject: object)
         as? OActiveRecord
     }
     

@@ -44,6 +44,6 @@ open class KVCRuleSelfAssignment<K: DynamicEnvironmentKey>
   }
   
   public func fireInContext(_ context: RuleContext) -> Any? {
-    return KeyValueCoding.value(forKeyPath: keyPath, inObject: self)
+    return KeyValueCoding.valueForKeyPath(keyPath, inObject: self)
   }
 }

@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Select latest available Xcode
-        uses: maxim-lobanov/setup-xcode@v1.2.1
+        uses: maxim-lobanov/setup-xcode@v1.5.1
         with:
           xcode-version: latest
       - name: Checkout Repository
@@ -20,3 +20,15 @@ jobs:
         run: swift build -c debug
       - name: Build Swift Release Package
         run: swift build -c release
+      - name: Run Swift Tests
+        run: swift test
+      - name: Build Xcode Project for iOS
+        run: >-
+          xcodebuild -project DirectToSwiftUI.xcodeproj
+          -scheme DirectToSwiftUI-Mobile -destination generic/platform=iOS
+          -configuration Debug CODE_SIGNING_ALLOWED=NO
+      - name: Build Xcode Project for watchOS
+        run: >-
+          xcodebuild -project DirectToSwiftUI.xcodeproj
+          -scheme DirectToSwiftUI-Watch -destination generic/platform=watchOS
+          -configuration Debug CODE_SIGNING_ALLOWED=NO

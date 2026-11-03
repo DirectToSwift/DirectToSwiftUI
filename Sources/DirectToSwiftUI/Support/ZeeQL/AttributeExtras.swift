@@ -22,7 +22,7 @@ public extension Attribute {
   func validateForInsert(_ object: AnyObject?) -> Bool {
     guard let object = object else { return false }
     let nullable = allowsNull ?? true
-    if !nullable, KeyValueCoding.value(forKey: name, inObject: object) == nil {
+    if !nullable, KeyValueCoding.valueForKey(name, inObject: object) == nil {
       let isAutoIncrement = self.isAutoIncrement ?? false
       if !isAutoIncrement { return false }
     }
@@ -31,7 +31,7 @@ public extension Attribute {
   func validateForUpdate(_ object: AnyObject?) -> Bool {
     guard let object = object else { return false }
     let nullable = allowsNull ?? true
-    if !nullable, KeyValueCoding.value(forKey: name, inObject: object) == nil {
+    if !nullable, KeyValueCoding.valueForKey(name, inObject: object) == nil {
       return false
     }
     return true
@@ -48,7 +48,7 @@ public extension Relationship {
     guard let object = object else { return false }
     if !isMandatory { return true }
     
-    let target = KeyValueCoding.value(forKeyPath: name, inObject: object)
+    let target = KeyValueCoding.valueForKeyPath(name, inObject: object)
     if target != nil { return true } // relationship is available
     
     // Note: The full object might not be fetched, but we could still have the
@@ -63,7 +63,7 @@ public extension Relationship {
       
       // technically we would need to check whether the attribute is nullable
       // or not for compound keys (/ and also validate the attribute)
-      if KeyValueCoding.value(forKeyPath: name, inObject: object) != nil {
+      if KeyValueCoding.valueForKeyPath(name, inObject: object) != nil {
         hadValidJoin = true
         break
       }

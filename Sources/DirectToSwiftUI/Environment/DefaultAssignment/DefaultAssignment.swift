@@ -66,7 +66,7 @@ public extension D2SDefaultAssignments {
     .init { ruleContext in
       let object      = ruleContext[D2SKeys.object]
       let propertyKey = ruleContext[D2SKeys.propertyKey]
-      return KeyValueCoding.value(forKeyPath: propertyKey, inObject: object)
+      return KeyValueCoding.valueForKeyPath(propertyKey, inObject: object)
     }
   }
 

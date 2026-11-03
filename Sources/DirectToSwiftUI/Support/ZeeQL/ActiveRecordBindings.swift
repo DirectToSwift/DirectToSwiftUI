@@ -60,7 +60,7 @@ internal extension ActiveRecord {
     nonFailingTakeValue(coerceString(value, forKey: key), forKeyPath: key)
   }
   func stringValue(for key: String) -> String {
-    guard let v = KeyValueCoding.value(forKeyPath: key, inObject: self) else {
+    guard let v = KeyValueCoding.valueForKeyPath(key, inObject: self) else {
       return ""
     }
     return coerceValueToString(v, formatter: nil, forKey: key)
@@ -70,7 +70,7 @@ internal extension ActiveRecord {
     nonFailingTakeValue(coerceDate(value, forKey: key), forKeyPath: key)
   }
   func dateValue(for key: String) -> Date? {
-    guard let v = KeyValueCoding.value(forKeyPath: key, inObject: self) else {
+    guard let v = KeyValueCoding.valueForKeyPath(key, inObject: self) else {
       return nil
     }
     return coerceValueToDate(v, forKey: key)
@@ -80,7 +80,7 @@ internal extension ActiveRecord {
     nonFailingTakeValue(coerceBool(value, forKey: key), forKeyPath: key)
   }
   func boolValue(for key: String) -> Bool? {
-    guard let v = KeyValueCoding.value(forKeyPath: key, inObject: self) else {
+    guard let v = KeyValueCoding.valueForKeyPath(key, inObject: self) else {
       return nil
     }
     return coerceValueToBool(v, forKey: key)

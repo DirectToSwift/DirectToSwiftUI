@@ -66,10 +66,10 @@ extension Relationship {
         return nil
       }
       
-      let selfValue = source.value(forKey: srcAttrName)
+      let selfValue = source.valueForKey(srcAttrName)
       let destKey   = StringKey(destAttrName)
       
-      let q = KeyValueQualifier(destKey, .EqualTo, selfValue)
+      let q = KeyValueQualifier(destKey, .equalTo, selfValue)
       qualifiers.append(q)
     }
     
@@ -87,7 +87,7 @@ extension ActiveRecord {
        -> OActiveRecord?
   {
     if !force,
-       let target = KeyValueCoding.value(forKeyPath: name,
+       let target = KeyValueCoding.valueForKeyPath(name,
                                          inObject: self) as? OActiveRecord {
       return target // cached, prefetched
     }
@@ -185,7 +185,7 @@ extension ActiveRecord {
         }
         
         if let destName = join.destination?.name ?? join.destinationName {
-          try takeValue(destination.value(forKey: destName), forKey: sourceName)
+          try takeValue(destination.valueForKey(destName), forKey: sourceName)
         }
         else {
           try takeValue(nil, forKey: sourceName)
@@ -219,7 +219,7 @@ struct JoinTargetID: Hashable {
     values.reserveCapacity(relationship.joins.count)
     for join in relationship.joins {
       guard let name  = (join.source?.name ?? join.sourceName),
-            let value = source.value(forKey: name) else {
+            let value = source.valueForKey(name) else {
         values.append(nil)
               continue
       }
@@ -232,7 +232,7 @@ struct JoinTargetID: Hashable {
   init(destination: OActiveRecord, relationship: Relationship) {
     values = relationship.joins.map { join in
       (join.destination?.name ?? join.destinationName)
-        .flatMap { name in destination.value(forKey: name) }
+        .flatMap { name in destination.valueForKey(name) }
     }
   }
   

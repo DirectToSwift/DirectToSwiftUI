@@ -91,7 +91,7 @@ extension Entity {
         map[name] = pat
       }
       q = or(q, qualifierToMatchAnyValue(
-        map, pat.isMixedCase ? .Like : .CaseInsensitiveLike)
+        map, pat.isMixedCase ? .like : .caseInsensitiveLike)
       )
     }
     
@@ -100,7 +100,7 @@ extension Entity {
       for name in numberAttributeNames {
         map[name] = numberValue
       }
-      q = or(q, qualifierToMatchAnyValue(map, .EqualTo))
+      q = or(q, qualifierToMatchAnyValue(map, .equalTo))
     }
     
     return q
@@ -192,14 +192,13 @@ extension Entity {
    * the property keys.
    */
   func prefetchPathesForPropertyKeys<S: Sequence>(_ propertyKeys: S)
-    -> [ String ]? where S.Element == String
+    -> [ String ] where S.Element == String
   {
     var pathes = Set<String>()
     for propertyKey in propertyKeys {
       insertPrefetchPathesForPropertyKey(propertyKey, into: &pathes)
     }
-    if pathes.isEmpty { return nil }
-    return Array(pathes)
+    return pathes.sorted()
   }
 
   private func insertPrefetchPathesForPropertyKey(_ propertyKey: String,
