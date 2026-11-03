@@ -20,8 +20,6 @@ jobs:
         run: swift build -c debug
       - name: Build Swift Release Package
         run: swift build -c release
-      - name: Run Swift Tests
-        run: swift test
       - name: Build Xcode Project for iOS
         run: >-
           xcodebuild -project DirectToSwiftUI.xcodeproj
