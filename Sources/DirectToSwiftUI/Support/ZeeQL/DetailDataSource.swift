@@ -75,7 +75,7 @@ extension Relationship {
     
     guard !qualifiers.isEmpty else { return nil }
     if qualifiers.count == 1 { return qualifiers[0] }
-    return CompoundQualifier(qualifiers: qualifiers, op: .And)
+    return CompoundQualifier(qualifiers: qualifiers, op: .and)
   }
 }
 

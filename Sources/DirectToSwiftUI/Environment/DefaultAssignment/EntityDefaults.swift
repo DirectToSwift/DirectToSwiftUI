@@ -24,12 +24,12 @@ public extension EntityD2S {
   var defaultSortOrderings : [ SortOrdering ] {
     if let pkeys = entity.primaryKeyAttributeNames, !pkeys.isEmpty {
       return pkeys.map { pkey in
-        SortOrdering(key: pkey, selector: .CompareAscending)
+        SortOrdering(key: pkey, selector: .ascending)
       }
     }
     
     guard let firstAttribute = entity.attributes.first else { return [] }
-    return [SortOrdering(key: firstAttribute.name, selector: .CompareAscending)]
+    return [SortOrdering(key: firstAttribute.name, selector: .ascending)]
   }
   
   /**

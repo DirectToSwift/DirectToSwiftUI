@@ -50,7 +50,7 @@ extension Rule {
     
     let qualifier: Qualifier? = {
       guard let idx = lhsRhsSplitter?.lowerBound else { return nil }
-      return qualifierWith(format: String(string[..<idx]))
+      return qualifierWithFormat(String(string[..<idx]))
     }()
     let qualifierEvaluation : RulePredicate
     if let q = qualifier {
