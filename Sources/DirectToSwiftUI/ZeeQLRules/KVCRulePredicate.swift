@@ -24,11 +24,11 @@ public extension QualifierEvaluation {
 // TBD: I think conformance has to be declared manually and can't be attached
 //      to the protocol?
 
-extension KeyValueQualifier      : RulePredicate {}
-extension KeyComparisonQualifier : RulePredicate {}
-extension BooleanQualifier       : RulePredicate {}
+extension KeyValueQualifier      : @retroactive RulePredicate {}
+extension KeyComparisonQualifier : @retroactive RulePredicate {}
+extension BooleanQualifier       : @retroactive RulePredicate {}
 
-extension CompoundQualifier      : RulePredicate {
+extension CompoundQualifier      : @retroactive RulePredicate {
   
   public var rulePredicateComplexity : Int {
     return qualifiers.reduce(0) {

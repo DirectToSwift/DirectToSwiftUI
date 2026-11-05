@@ -9,7 +9,7 @@ import SwiftUIRules
 import protocol ZeeQL.Qualifier
 import protocol ZeeQL.QualifierEvaluation
 
-extension RuleClosurePredicate: Qualifier {
+extension RuleClosurePredicate: @retroactive Qualifier {
   public func appendToStringRepresentation(_ ms: inout String) {
     ms += "<RuleClosurePredicate>"
   }
@@ -18,7 +18,7 @@ extension RuleClosurePredicate: Qualifier {
   }
 }
 
-extension RuleClosurePredicate: QualifierEvaluation {
+extension RuleClosurePredicate: @retroactive QualifierEvaluation {
   public func evaluate(with object: Any?) -> Bool {
     guard let ruleContext = object as? RuleContext else { return false }
     return evaluate(in: ruleContext)
