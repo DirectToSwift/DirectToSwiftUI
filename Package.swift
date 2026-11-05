@@ -29,6 +29,15 @@ let package = Package(
               "SwiftUIRules",
               .product(name: "ZeeQL",        package: "ZeeQL3"),
               .product(name: "ZeeQLCombine", package: "ZeeQL3Combine")
+            ],
+            exclude: [
+              "DatabaseSetup.md",
+              "README.md",
+              "Environment/README.md",
+              "Environment/DefaultAssignment/README.md",
+              "Views/README.md",
+              "Views/BasicLook/Properties/README.md",
+              "ZeeQLRules/README.md"
             ])
   ],
   
