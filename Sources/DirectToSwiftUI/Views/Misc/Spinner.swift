@@ -27,7 +27,8 @@ struct Spinner: View {
       .rotationEffect(.degrees(isAnimating ? 360 : 0))
       .animation(
         Animation.linear(duration: speed)
-          .repeatForever(autoreverses: false)
+          .repeatForever(autoreverses: false),
+        value: isAnimating
       )
   }
   #else // no systemImage on macOS ...
