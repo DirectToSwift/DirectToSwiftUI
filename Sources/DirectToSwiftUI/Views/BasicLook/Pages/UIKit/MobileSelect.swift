@@ -64,7 +64,7 @@ public extension BasicLook.Page.UIKit {
 
       typealias Fault = D2SFault<Object, D2SDisplayGroup<Object>>
 
-      @ObservedObject var displayGroup : D2SDisplayGroup<Object>
+      @StateObject    var displayGroup : D2SDisplayGroup<Object>
       @ObservedObject var sourceObject : OActiveRecord
       
       @Environment(\.relationship)     private var relationship
@@ -77,11 +77,11 @@ public extension BasicLook.Page.UIKit {
       @State var selectedID     : FaultJoinIDWrap.ID?
       @State var isShowingError = false
       
-      init(displayGroup : D2SDisplayGroup<Object>,
+      init(displayGroup : @autoclosure @escaping () -> D2SDisplayGroup<Object>,
            sourceObject : OActiveRecord,
            initialID    : JoinTargetID?)
       {
-        self.displayGroup = displayGroup
+        self._displayGroup = StateObject(wrappedValue: displayGroup())
         self.sourceObject = sourceObject
         self._selectedID  = State(initialValue: initialID.flatMap({.object($0)}))
       }

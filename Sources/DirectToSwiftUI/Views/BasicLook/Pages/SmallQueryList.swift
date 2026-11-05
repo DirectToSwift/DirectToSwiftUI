@@ -36,14 +36,13 @@ public extension BasicLook.Page {
 
     struct Bound<Object: OActiveRecord>: View {
 
-      // This seems to crash on macOS b7
-      @ObservedObject private var displayGroup : D2SDisplayGroup<Object>
+      @StateObject private var displayGroup : D2SDisplayGroup<Object>
       
       init(dataSource: ActiveDataSource<Object>, auxiliaryQualifier: Qualifier?) {
-        self.displayGroup = D2SDisplayGroup(
+        self._displayGroup = StateObject(wrappedValue: D2SDisplayGroup(
           dataSource: dataSource,
           auxiliaryQualifier: auxiliaryQualifier
-        )
+        ))
       }
 
       var body: some View {

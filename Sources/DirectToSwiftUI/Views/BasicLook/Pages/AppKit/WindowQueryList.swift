@@ -53,19 +53,18 @@ public extension BasicLook.Page.AppKit {
       @Environment(\.initialPropertyValues) private var initialPropertyValues
       @Environment(\.creationTimestampPropertyKey) private var createTS
       
-      // This seems to crash on macOS b7
-      @ObservedObject private var displayGroup : D2SDisplayGroup<Object>
+      @StateObject private var displayGroup : D2SDisplayGroup<Object>
       
       private var entity: Entity { displayGroup.dataSource.entity! }
       
       init(dataSource: ActiveDataSource<Object>, auxiliaryQualifier: Qualifier?,
            displayPropertyKeys: [ String ])
       {
-        self.displayGroup = D2SDisplayGroup(
+        self._displayGroup = StateObject(wrappedValue: D2SDisplayGroup(
           dataSource: dataSource,
           auxiliaryQualifier: auxiliaryQualifier,
           displayPropertyKeys: displayPropertyKeys
-        )
+        ))
       }
       
       private func openWindow(for object: OActiveRecord, task: String,

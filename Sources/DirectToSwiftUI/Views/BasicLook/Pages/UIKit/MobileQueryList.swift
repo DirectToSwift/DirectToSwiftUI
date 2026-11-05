@@ -47,7 +47,7 @@ public extension BasicLook.Page.UIKit {
 
     struct Bound<Object: OActiveRecord>: View {
       
-      @ObservedObject var displayGroup : D2SDisplayGroup<Object>
+      @StateObject private var displayGroup : D2SDisplayGroup<Object>
       
       @State                                private var showSortSelector = false
       @Environment(\.isEntityReadOnly)      private var isReadOnly
@@ -55,6 +55,10 @@ public extension BasicLook.Page.UIKit {
       @Environment(\.entity)                private var entity
       @Environment(\.initialPropertyValues) private var initialPropertyValues
       @Environment(\.creationTimestampPropertyKey) private var createTS
+
+      init(displayGroup: @autoclosure @escaping () -> D2SDisplayGroup<Object>) {
+        self._displayGroup = StateObject(wrappedValue: displayGroup())
+      }
 
       private var sortButtons : [ ActionSheet.Button ] {
         // FIXME: limit in size

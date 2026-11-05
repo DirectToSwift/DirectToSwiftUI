@@ -67,6 +67,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
   private func setNeedsRefetch() { needsRefetch.send(fetchSpecification) }
   private var needsRefetch = PassthroughSubject<FetchSpecification, Never>()
     // Not using @Published because we want a _didset_
+  private var needsRefetchToken : AnyCancellable?
   
   public init(dataSource: ActiveDataSource<Object>,
               auxiliaryQualifier: Qualifier? = nil,
@@ -88,7 +89,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
     
     results.assignResolver(self)
     
-    _ = needsRefetch
+    needsRefetchToken = needsRefetch
       .debounce(for: 0.5, scheduler: RunLoop.main)
       .sink { [weak self] newValue in
         self?.fetchCount(newValue)
@@ -136,6 +137,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
     // (this is why paging by index is quite generally not a great idea :-) )
     // Note: We keep the fetched GIDs!
     // FIXME: decouple this.
+    activeQueries.removeAll() // those ran against the old result set
     results.clearOrderAndApplyNewCount(count)
   }
   
@@ -237,6 +239,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
   public func resolveFault(at index: Int) {
     assert(_dispatchPreconditionTest(.onQueue(.main)))
     
+    guard index < results.count        else { return } // stale row
     guard case .fault = results[index] else { return } // already fetched
     guard !isAlreadyFetching(index)    else { return }
 

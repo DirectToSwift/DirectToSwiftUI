@@ -80,6 +80,8 @@ extension Entity {
     //       => name:He* 10111 -skyrix +addresses.city:Magdeburg
     // TODO: show message unless cookie is set with instructions (using Semantic
     //       Nag attached to cookie)
+    guard !qs.isEmpty else { return nil }
+    
     let isNumber = Int(qs)
     var q        : Qualifier? = nil
     
