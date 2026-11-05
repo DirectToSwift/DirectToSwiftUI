@@ -11,7 +11,7 @@ import class ZeeQLCombine.ActiveDataSource
 
 public extension BasicLook.Page.UIKit {
 
-#if !os(iOS)
+#if !os(iOS) && !os(macOS)
   static func Select() -> some View {
     Text("\(#function) is not available on this platform")
   }
@@ -22,7 +22,7 @@ public extension BasicLook.Page.UIKit {
    *
    * Backed by a D2SDisplayGroup.
    *
-   * This version is intended for iOS.
+   * This version is intended for iOS and macOS.
    */
   struct Select: View {
     // Note: This is _almost_ a dupe of the QueryList page. But not quite.
@@ -157,31 +157,62 @@ public extension BasicLook.Page.UIKit {
         }
       }
 
-      var body: some View {
+      private var list: some View {
         VStack(spacing: 0) {
           SearchField(search: $displayGroup.queryString)
           
-          List(mappedResults, selection: $selectedID) { wrap in
-            D2SFaultContainer(fault: wrap.fault) { object in
-              self.rowComponent
-                .tag(self.id(for: object))
+          #if os(iOS)
+            List(mappedResults, selection: $selectedID) { wrap in
+              D2SFaultContainer(fault: wrap.fault) { object in
+                self.rowComponent
+                  .tag(self.id(for: object))
+              }
             }
-          }
-          .environment(\.editMode, .constant(EditMode.active)) // required
+            .environment(\.editMode, .constant(EditMode.active)) // required
+          #else
+            List(mappedResults, selection: $selectedID) { wrap in
+              D2SFaultContainer(fault: wrap.fault) { object in
+                self.rowComponent
+                  .tag(self.id(for: object))
+              }
+            }
+          #endif
 
           debugComponent
         }
         .alert(isPresented: $isShowingError, content: errorAlert)
-        .navigationBarItems(trailing:
-          HStack {
-            Button(action: self.saveSelection) {
-              Text("Apply")
-            }
-            .disabled(!isValid)
-          }
-        )
       }
+
+      #if os(iOS)
+        var body: some View {
+          list
+            .navigationBarItems(trailing:
+              HStack {
+                Button(action: self.saveSelection) {
+                  Text("Apply")
+                }
+                .disabled(!isValid)
+              }
+            )
+        }
+      #else
+        var body: some View {
+          list
+            .safeAreaInset(edge: .bottom) {
+              HStack {
+                Button("Cancel", action: self.goBack)
+                  .keyboardShortcut(.cancelAction)
+                Spacer()
+                Button("Apply", action: self.saveSelection)
+                  .keyboardShortcut(.defaultAction)
+                  .disabled(!isValid)
+              }
+              .padding()
+              .background(.bar)
+            }
+        }
+      #endif
     }
   }
-#endif // iOS
+#endif // iOS, macOS
 }

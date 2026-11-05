@@ -33,12 +33,22 @@ public extension BasicLook.Property.Edit {
 
       let content : V
 
-      var body: some View {
-        VStack(alignment: .leading) {
-          D2SPropertyNameHeadline(isValid: isValid)
-          content
+      #if os(macOS) // one row per property in the grouped Form
+        var body: some View {
+          HStack {
+            D2SEditPropertyName(isValid: isValid)
+            Spacer()
+            content
+          }
         }
-      }
+      #else
+        var body: some View {
+          VStack(alignment: .leading) {
+            D2SPropertyNameHeadline(isValid: isValid)
+            content
+          }
+        }
+      #endif
     }
 
     public var body: some View {

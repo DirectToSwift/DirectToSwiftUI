@@ -38,15 +38,29 @@ public struct D2SNavigationLink<Label, Destination>: View
   public var body: some View {
     Group {
       if isActive != nil {
-        NavigationLink(destination: destination
-                                      .environmentObject(context.object)
-                                      .ruleContext(context),
-                       isActive: isActive!)
-        {
-          label
-            .environmentObject(context.object)
-            .ruleContext(context)
-        }
+        #if os(macOS)
+          Button(action: { self.isActive!.wrappedValue = true }) {
+            label
+              .environmentObject(context.object)
+              .ruleContext(context)
+          }
+          .buttonStyle(.plain)
+          .navigationDestination(isPresented: isActive!) {
+            destination
+              .environmentObject(context.object)
+              .ruleContext(context)
+          }
+        #else
+          NavigationLink(destination: destination
+                                        .environmentObject(context.object)
+                                        .ruleContext(context),
+                         isActive: isActive!)
+          {
+            label
+              .environmentObject(context.object)
+              .ruleContext(context)
+          }
+        #endif
       }
       else {
         NavigationLink(destination: destination

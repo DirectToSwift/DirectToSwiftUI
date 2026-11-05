@@ -9,10 +9,9 @@ import SwiftUI
 
 public extension BasicLook.PageWrapper {
   /**
-   * NavigationView really works badly on macOS. This is kinda like a
-   * replacement but lacks the split view ...
+   * Shows the entities and the selected entity side by side.
    *
-   * Note: This is only really intended for macOS to workaround navview issues.
+   * Note: This is only really intended for macOS.
    */
   struct MasterDetail: View {
     

@@ -35,7 +35,7 @@ public struct D2SPropertyNameHeadline: View {
   
   public var body: some View {
     HStack {
-      (Text(label) + Text(verbatim: ":"))
+      Text(verbatim: "\(label):")
         .foregroundColor(isValid ? .secondary : .red)
         .font(.subheadline)
       Spacer()

@@ -8,7 +8,7 @@
 SWIFT_VERSION = 5.1
 
 // Deployment Targets
-MACOSX_DEPLOYMENT_TARGET                   = 12.0
+MACOSX_DEPLOYMENT_TARGET                   = 26.0
 IPHONEOS_DEPLOYMENT_TARGET                 = 15.0
 WATCHOS_DEPLOYMENT_TARGET                  = 9.0
 TVOS_DEPLOYMENT_TARGET                     = 13.0

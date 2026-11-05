@@ -37,7 +37,7 @@ can be found over here:
 
 Direct to SwiftUI requires Swift 6 or later and an environment capable to run
 SwiftUI.
-That is: macOS 12, iOS 15 or watchOS 9.
+That is: macOS 26, iOS 15 or watchOS 9.
 
 ## Using the Package
 

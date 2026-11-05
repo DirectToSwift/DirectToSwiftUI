@@ -31,6 +31,17 @@ public extension BasicLook.Page {
           }
           .task(.edit)
         }
+      #elseif os(macOS)
+        public var body: some View {
+          VStack {
+            Form {
+              D2SDisplayProperties() // form scrolls etc
+            }
+            .formStyle(.grouped)
+            debugComponent
+          }
+          .task(.edit)
+        }
       #else
         public var body: some View {
           VStack {
@@ -44,12 +55,15 @@ public extension BasicLook.Page {
       #endif
     }
       
-    #if os(iOS)
-      struct ContentWithNavigationBar: View {
+    #if os(iOS) || os(macOS)
+      struct ContentWithActions: View {
         
         @EnvironmentObject private var object : OActiveRecord
 
         @Environment(\.presentationMode)           private var presentationMode
+        #if os(macOS)
+          @Environment(\.closeInspectWindow)       private var closeWindow
+        #endif
         @Environment(\.updateTimestampPropertyKey) private var updateTS
 
         @State private var lastError      : Swift.Error?
@@ -65,10 +79,14 @@ public extension BasicLook.Page {
         }
         
         func goBack() {
-          // that feels dirty
-          // programmatically POP the edit page
-          // I think a NavLink is necessary here (plus a binding to pass along)
-          presentationMode.wrappedValue.dismiss()
+          #if os(macOS) // the page lives in its own `D2SInspectWindow`
+            closeWindow?()
+          #else
+            // that feels dirty
+            // programmatically POP the edit page
+            // I think a NavLink is necessary here (plus a binding to pass along)
+            presentationMode.wrappedValue.dismiss()
+          #endif
         }
         
         private func save() {
@@ -111,25 +129,44 @@ public extension BasicLook.Page {
           }
         }
 
-        var body: some View {
-          Content()
-            .navigationBarItems(trailing: Group {
-              HStack {
-                Button(action: self.discard) {
-                  Image(systemName: "trash.circle")
+        #if os(iOS)
+          var body: some View {
+            Content()
+              .navigationBarItems(trailing: Group {
+                HStack {
+                  Button(action: self.discard) {
+                    Image(systemName: "trash.circle")
+                  }
+                  Button(action: self.save) { // text looks better
+                    Text(object.isNew ? "Create" : "Save")
+                  }
                 }
-                Button(action: self.save) { // text looks better
-                  Text(object.isNew ? "Create" : "Save")
+                .disabled(!hasChanges)
+              })
+              .alert(isPresented: $isShowingError, content: errorAlert)
+          }
+        #else
+          var body: some View {
+            Content()
+              .safeAreaInset(edge: .bottom) {
+                HStack {
+                  Button("Revert", action: self.discard)
+                    .disabled(!hasChanges)
+                  Spacer()
+                  Button(object.isNew ? "Create" : "Save", action: self.save)
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(!hasChanges)
                 }
+                .padding()
+                .background(.bar)
               }
-              .disabled(!hasChanges)
-            })
-            .alert(isPresented: $isShowingError, content: errorAlert)
-        }
+              .alert(isPresented: $isShowingError, content: errorAlert)
+          }
+        #endif
       }
       
       public var body: some View {
-        ContentWithNavigationBar()
+        ContentWithActions()
       }
     #else
       public var body: some View {

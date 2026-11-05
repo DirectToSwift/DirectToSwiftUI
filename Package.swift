@@ -7,7 +7,7 @@ let package = Package(
   name: "DirectToSwiftUI",
   
   platforms: [
-    .macOS(.v12), .iOS(.v15), .watchOS(.v9)
+    .macOS("26.0"), .iOS(.v15), .watchOS(.v9)
   ],
   
   products: [

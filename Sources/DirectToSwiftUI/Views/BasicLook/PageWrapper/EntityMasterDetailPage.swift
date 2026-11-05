@@ -10,8 +10,7 @@ import SwiftUI
 public extension BasicLook.PageWrapper.MasterDetail {
 
   /**
-   * NavigationView really works badly on macOS. This is kinda like a replacement
-   * but lacks the split view ...
+   * Shows the entities in a sidebar and the list of the selected one next to it.
    *
    * Note: This is only intended for macOS.
    */
@@ -53,38 +52,42 @@ public extension BasicLook.PageWrapper.MasterDetail {
       }
     }
     
-    private var backgroundColor: Color? {
-      #if os(macOS)
-        return Color(NSColor.textBackgroundColor)
-      #else
-        return nil
-      #endif
-    }
-
-    // FIXME: show navbar title?
-    // TODO: Async login page
-    public var body: some View {
-      HStack(spacing: 0 as CGFloat) {
-        //HSplitView { // this works, but we get a window title bar again
-        
-        Sidebar(selectedEntityName: $selectedEntityName)
-          .task(.query)
-          .frame(minWidth: 120 as CGFloat, maxWidth: 200 as CGFloat)
-        
-        Group {
-          if selectedEntityName == nil {
-            EmptyContent()
-          }
-          else {
-            EntityContent()
-              .environment(\.entity,
-                           selectedEntity ?? D2SKeys.entity.defaultValue)
-          }
-        }
-        .frame(minWidth: 400 as CGFloat, idealWidth: 600 as CGFloat,
-               maxWidth: .infinity)
-        .background(self.backgroundColor)
+    @ViewBuilder private var detail: some View {
+      if selectedEntityName == nil {
+        EmptyContent()
+      }
+      else {
+        EntityContent()
+          .environment(\.entity,
+                       selectedEntity ?? D2SKeys.entity.defaultValue)
+          .id(selectedEntityName)
       }
     }
+
+    // TODO: Async login page
+    #if os(macOS)
+      public var body: some View {
+        NavigationSplitView {
+          Sidebar(selectedEntityName: $selectedEntityName)
+            .task(.query)
+            .navigationSplitViewColumnWidth(min: 160, ideal: 200, max: 300)
+        } detail: {
+          detail
+            .frame(minWidth: 400 as CGFloat)
+        }
+      }
+    #else
+      public var body: some View {
+        HStack(spacing: 0 as CGFloat) {
+          Sidebar(selectedEntityName: $selectedEntityName)
+            .task(.query)
+            .frame(minWidth: 120 as CGFloat, maxWidth: 200 as CGFloat)
+          
+          detail
+            .frame(minWidth: 400 as CGFloat, idealWidth: 600 as CGFloat,
+                   maxWidth: .infinity)
+        }
+      }
+    #endif
   }
 }

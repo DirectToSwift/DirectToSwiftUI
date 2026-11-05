@@ -15,9 +15,7 @@ public extension BasicLook.Page {
    * View which binds to the `query` task itself, so we can't find it using the
    * rule system.
    */
-  #if os(macOS)
-    static func Select() -> some View { return Text("TODO") }
-  #elseif os(iOS)
+  #if os(iOS) || os(macOS)
     static func Select() -> some View { return UIKit.Select() }
   #elseif os(watchOS)
     static func Select() -> some View { return Text("TODO") }
