@@ -69,7 +69,7 @@ public extension BasicLook.Page.UIKit {
              + [ .cancel { self.displayGroup.sortAttribute = nil } ]
       }
       
-      struct RowFaultView<Object: OActiveRecord>: View {
+      struct RowFaultView<RowObject: OActiveRecord>: View {
       
         final class ActionModel: ObservableObject {
           @Published var action = D2SObjectAction.nextTask {
@@ -84,7 +84,7 @@ public extension BasicLook.Page.UIKit {
           }
         }
 
-        typealias Fault = D2SFault<Object, D2SDisplayGroup<Object>>
+        typealias Fault = D2SFault<RowObject, D2SDisplayGroup<RowObject>>
         
         @ObservedObject var actionModel = ActionModel()
         let fault : Fault

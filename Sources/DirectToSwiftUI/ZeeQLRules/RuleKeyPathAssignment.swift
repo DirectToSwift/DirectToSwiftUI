@@ -48,7 +48,7 @@ public struct RuleKeyPathAssignment<K: DynamicEnvironmentKey>
   public var candidateKeyType: ObjectIdentifier {
     return ObjectIdentifier(key)
   }
-  public func isCandidateForKey<K: DynamicEnvironmentKey>(_ key: K.Type)
+  public func isCandidateForKey<Key: DynamicEnvironmentKey>(_ key: Key.Type)
               -> Bool
   {
     return self.key == key

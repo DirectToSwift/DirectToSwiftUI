@@ -24,7 +24,7 @@ public extension D2SDefaultAssignments {
     .init { ruleContext in
       // Hm, this recursion won't fly:
       // \.model.d2s.isDefault == true => \.model <= \.database.model // '!'
-      guard let model = ruleContext[D2SKeys.database].model else {
+      guard let model = ruleContext[D2SKeys.database.self].model else {
         return D2SKeys.model.defaultValue
       }
       return model
@@ -33,16 +33,16 @@ public extension D2SDefaultAssignments {
   
   static var attribute: A<D2SKeys.attribute> {
     .init { ruleContext in
-      let entity      = ruleContext[D2SKeys.entity]
-      let propertyKey = ruleContext[D2SKeys.propertyKey]
+      let entity      = ruleContext[D2SKeys.entity.self]
+      let propertyKey = ruleContext[D2SKeys.propertyKey.self]
       return entity[attribute: propertyKey]
           ?? D2SKeys.attribute.defaultValue
     }
   }
   static var relationship: A<D2SKeys.relationship> {
     .init { ruleContext in
-      let entity      = ruleContext[D2SKeys.entity]
-      let propertyKey = ruleContext[D2SKeys.propertyKey]
+      let entity      = ruleContext[D2SKeys.entity.self]
+      let propertyKey = ruleContext[D2SKeys.propertyKey.self]
       return entity[relationship: propertyKey]
           ?? D2SKeys.relationship.defaultValue
     }
@@ -50,29 +50,29 @@ public extension D2SDefaultAssignments {
   
   static var isEntityReadOnly: A<D2SKeys.isEntityReadOnly> {
     .init { ruleContext in
-      let entity     = ruleContext[D2SKeys.entity]
-      let roEntities = ruleContext[D2SKeys.readOnlyEntityNames]
+      let entity     = ruleContext[D2SKeys.entity.self]
+      let roEntities = ruleContext[D2SKeys.readOnlyEntityNames.self]
       return roEntities.contains(entity.name)
     }
   }
   static var isObjectEditable: A<D2SKeys.isObjectEditable> {
-    .init { ruleContext in !ruleContext[D2SKeys.isEntityReadOnly] }
+    .init { ruleContext in !ruleContext[D2SKeys.isEntityReadOnly.self] }
   }
   static var isObjectDeletable: A<D2SKeys.isObjectDeletable> {
-    .init { ruleContext in ruleContext[D2SKeys.isObjectEditable] }
+    .init { ruleContext in ruleContext[D2SKeys.isObjectEditable.self] }
   }
 
   static var propertyValue: A<D2SKeys.propertyValue> {
     .init { ruleContext in
-      let object      = ruleContext[D2SKeys.object]
-      let propertyKey = ruleContext[D2SKeys.propertyKey]
+      let object      = ruleContext[D2SKeys.object.self]
+      let propertyKey = ruleContext[D2SKeys.propertyKey.self]
       return KeyValueCoding.valueForKeyPath(propertyKey, inObject: object)
     }
   }
 
   static var loginEntity: A<D2SKeys.entity> {
     .init { ruleContext in
-      let model = ruleContext[D2SKeys.model]
+      let model = ruleContext[D2SKeys.model.self]
       return model.lookupUserDatabaseEntity() ?? D2SKeys.entity.defaultValue
     }
   }

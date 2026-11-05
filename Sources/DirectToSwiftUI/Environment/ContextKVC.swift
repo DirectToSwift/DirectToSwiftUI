@@ -9,7 +9,7 @@ import SwiftUIRules
 import protocol ZeeQL.KeyValueCodingType
 import struct   SwiftUI.EnvironmentValues
 
-extension EnvironmentValues: KeyValueCodingType {
+extension EnvironmentValues: @retroactive KeyValueCodingType {
   
   /**
    * SwiftUI.EnvironmentValues dispatches KVC calls to its attached
@@ -20,7 +20,7 @@ extension EnvironmentValues: KeyValueCodingType {
   }
 }
 
-extension RuleContext: KeyValueCodingType {
+extension RuleContext: @retroactive KeyValueCodingType {
 
   /**
    * RuleContext KVC uses a static map `kvcToEnvKey` which is setup in the

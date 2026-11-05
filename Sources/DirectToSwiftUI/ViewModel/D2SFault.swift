@@ -19,8 +19,8 @@ public enum D2SFault<Object /*: AnyObject*/, Resolver>
   // Note: Using AnyObject in the generic here breaks everything!
   
   /// Keep an object reference as unowned, to break cycles
-  public struct Unowned<Object: AnyObject> {
-    unowned let object: Object
+  public struct Unowned<Target: AnyObject> {
+    unowned let object: Target
   }
   
   init(_ id: GlobalID, _ resolver: Resolver) {

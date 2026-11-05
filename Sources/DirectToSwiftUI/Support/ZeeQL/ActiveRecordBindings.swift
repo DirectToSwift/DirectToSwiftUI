@@ -8,7 +8,7 @@
 import SwiftUI
 import ZeeQL
 
-extension ActiveRecord: Identifiable {
+extension ActiveRecord: @retroactive Identifiable {
   
   // TODO: use the pkey/GID instead. This uses the ObjectIdentifier.
   

@@ -31,7 +31,7 @@ public final class D2SRuleEnvironment: ObservableObject {
     self.ruleModel = ruleModel
     
     ruleContext = RuleContext(ruleModel: ruleModel)
-    ruleContext[D2SKeys.database] = Database(adaptor: adaptor)
+    ruleContext[D2SKeys.database.self] = Database(adaptor: adaptor)
     
     if let model = adaptor.model {
       setupWithModel(model)
@@ -40,7 +40,7 @@ public final class D2SRuleEnvironment: ObservableObject {
   
   private func setupWithModel(_ model: Model) {
     self.databaseModel = model
-    ruleContext[D2SKeys.model] = model
+    ruleContext[D2SKeys.model.self] = model
   }
   
   private var modelFetch : AnyCancellable?
