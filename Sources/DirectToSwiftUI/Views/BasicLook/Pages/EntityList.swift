@@ -67,12 +67,20 @@ public extension BasicLook.Page {
 
       public var body: some View {
         VStack {
-          List(names, id: \String.self) { name in
-            Cell(name: name)
-              .environment(\.entity, self.entity(for: name))
+          List {
+            ForEach(names, id: \String.self) { name in
+              Cell(name: name)
+                .environment(\.entity, self.entity(for: name))
+            }
+            #if os(watchOS) // no navigation bar items
+              D2SLogoutButton()
+            #endif
           }
           debugComponent
         }
+        #if os(iOS)
+          .navigationBarItems(leading: D2SLogoutButton())
+        #endif
       }
     #endif
     

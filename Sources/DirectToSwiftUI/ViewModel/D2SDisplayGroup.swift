@@ -64,8 +64,13 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
     didSet { setNeedsRefetch() }
   }
   
+  /// The spec `results` got counted for. `fetchSpecification` runs ahead of it
+  /// until the debounced count arrives, and batches must match the count.
+  private var resultsFetchSpecification : ModelFetchSpecification
+  
   private func setNeedsRefetch() { needsRefetch.send(fetchSpecification) }
-  private var needsRefetch = PassthroughSubject<FetchSpecification, Never>()
+  private var needsRefetch =
+                PassthroughSubject<ModelFetchSpecification, Never>()
     // Not using @Published because we want a _didset_
   private var needsRefetchToken : AnyCancellable?
   
@@ -80,12 +85,14 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
     self.batchCount         = batchCount
     self.dataSource         = dataSource
     self.auxiliaryQualifier = auxiliaryQualifier
-    self.fetchSpecification = buildInitialFetchSpec(for: dataSource,
-                                auxiliaryQualifier: auxiliaryQualifier)
+    var fs = buildInitialFetchSpec(for: dataSource,
+                                   auxiliaryQualifier: auxiliaryQualifier)
     if let keys = displayPropertyKeys, let entity = dataSource.entity {
-      self.fetchSpecification.prefetchingRelationshipKeyPathes =
+      fs.prefetchingRelationshipKeyPathes =
         entity.prefetchPathesForPropertyKeys(keys)
     }
+    self.fetchSpecification        = fs
+    self.resultsFetchSpecification = fs
     
     results.assignResolver(self)
     
@@ -119,9 +126,12 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
   
   // MARK: - Fetching Counts
   
-  private func integrateCount(_ count: Int) {
+  private func integrateCount(_ count: Int,
+                              for fetchSpecification: ModelFetchSpecification)
+  {
     assert(_dispatchPreconditionTest(.onQueue(.main)))
     self.countFetchToken = nil
+    self.resultsFetchSpecification = fetchSpecification
 
     #if false // nope, a fetch count means we rebuild!
       if count == results.count { return } // all good already
@@ -143,7 +153,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
   
   private var countFetchToken : AnyCancellable?
   
-  private func fetchCount(_ fetchSpecification: FetchSpecification) {
+  private func fetchCount(_ fetchSpecification: ModelFetchSpecification) {
     let fs = fetchSpecification // has to be done, can't use inside fetchCount?
     countFetchToken = dataSource.fetchCount(fs, on: D2SFetchQueue)
       .receive(on: RunLoop.main)
@@ -152,7 +162,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
         self.handleError(error)
         return Just(0)
       }
-      .sink(receiveValue: self.integrateCount)
+      .sink { count in self.integrateCount(count, for: fs) }
   }
   
   
@@ -247,8 +257,8 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
     let fetchRange = fetchRangeForIndex(index)
     
     // TODO: add .range operator! (with closed, open, all!)
-    let entity = fetchSpecification.entity ?? dataSource.entity
-    let fs     = fetchSpecification.range(fetchRange)
+    let entity = resultsFetchSpecification.entity ?? dataSource.entity
+    let fs     = resultsFetchSpecification.range(fetchRange)
     assert(!fs.sortOrderings.isEmpty)
     
     let query = Query(range: fetchRange)
@@ -271,7 +281,7 @@ public final class D2SDisplayGroup<Object: OActiveRecord>
             .eraseToAnyPublisher()
         }
         
-        var objectFS = self.fetchSpecification
+        var objectFS = self.resultsFetchSpecification
         objectFS.qualifier =
           missingGIDs.map({ entity!.qualifierForGlobalID($0) }).compactingOr()
         return dataSource.fetchObjects(objectFS, on: D2SFetchQueue)

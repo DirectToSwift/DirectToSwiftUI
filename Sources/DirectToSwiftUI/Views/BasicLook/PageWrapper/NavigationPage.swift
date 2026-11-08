@@ -37,8 +37,10 @@ public extension BasicLook.PageWrapper {
         }
       }
     #elseif os(watchOS)
-      public var body: some View { // no NavigationView on watchOS
-        RootTitledPageView()
+      public var body: some View {
+        NavigationStack {
+          RootTitledPageView()
+        }
       }
     #else // iOS, watchOS
       public var body: some View {

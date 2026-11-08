@@ -42,6 +42,10 @@ public extension BasicLook.PageWrapper.MasterDetail.EntityMasterDetailPage {
           }
         }
         .listStyle(.sidebar)
+        .safeAreaInset(edge: .bottom) {
+          D2SLogoutButton()
+            .padding(8)
+        }
       #else // currently use for iOS etc
         List { // (selection: $selection) {
           Section(header: Text("Entities")) { // this is required for sidebar!

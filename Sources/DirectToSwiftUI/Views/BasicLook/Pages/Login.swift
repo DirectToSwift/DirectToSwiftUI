@@ -8,6 +8,36 @@
 import SwiftUI
 import ZeeQL
 
+private struct LogoutKey: EnvironmentKey {
+  static let defaultValue : (() -> Void)? = nil
+}
+
+public extension EnvironmentValues {
+  /// Returns to the login page, `nil` if no user is logged in.
+  var logout : (() -> Void)? {
+    get { self[LogoutKey.self] }
+    set { self[LogoutKey.self] = newValue }
+  }
+}
+
+/**
+ * Logs out the current user, shows nothing if the app runs without a login.
+ */
+public struct D2SLogoutButton: View {
+  
+  @Environment(\.logout) private var logout
+  
+  public init() {}
+  
+  public var body: some View {
+    if let logout = logout {
+      Button(action: logout) {
+        Text("Logout")
+      }
+    }
+  }
+}
+
 public extension BasicLook.Page {
   
   /**
@@ -93,6 +123,14 @@ public extension BasicLook.Page {
       }
     }
 
+    @ViewBuilder private var nextPage: some View {
+      #if os(macOS) // the entities are hosted in the split view
+        BasicLook.PageWrapper.MasterDetail()
+      #else
+        D2SPageView()
+      #endif
+    }
+
     public var body: some View {
       Group {
         if loginUser == nil {
@@ -124,9 +162,10 @@ public extension BasicLook.Page {
           }
         }
         else {
-          D2SPageView()
+          nextPage
             .task(nextTask)
             .environment(\.user, loginUser!)
+            .environment(\.logout, { self.loginUser = nil })
             // TODO: clear entity
         }
       }

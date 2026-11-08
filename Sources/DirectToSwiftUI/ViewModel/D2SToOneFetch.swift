@@ -21,6 +21,8 @@ public final class D2SToOneFetch: ObservableObject {
   
   var isReady : Bool { destination != nil }
   
+  private var fetchToken : AnyCancellable?
+  
   public init(object: OActiveRecord, propertyKey: String) {
     self.object      = object
     self.propertyKey = propertyKey
@@ -34,13 +36,13 @@ public final class D2SToOneFetch: ObservableObject {
   }
   
   func resume() {
-    guard destination == nil else { return }
+    guard destination == nil, fetchToken == nil else { return }
     
     // Note: This _does_ try to fetch `nil` values, which is not strictly
     //       wrong.
     
-    _ = object.fetchToOneRelationship(propertyKey)
-      .receive(on: RunLoop.main) // this keeps it around
+    fetchToken = object.fetchToOneRelationship(propertyKey)
+      .receive(on: RunLoop.main)
       .catch { ( error : Swift.Error ) -> Just<OActiveRecord?> in
         return Just(nil)
       }
@@ -49,6 +51,7 @@ public final class D2SToOneFetch: ObservableObject {
         try? KeyValueCoding.takeValue(newValue, forKeyPath: self.propertyKey,
                                       inObject: self.object)
         self.destination = newValue
+        self.fetchToken  = nil
       }
   }
 }

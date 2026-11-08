@@ -18,9 +18,14 @@ public extension BasicLook.PageWrapper {
     @Environment(\.ruleContext) private var ruleContext
     
     #if os(macOS) // use an own, custom component
+      @Environment(\.task) private var task
+
       public var body: some View {
-        EntityMasterDetailPage()
-          .ruleContext(ruleContext)
+        Group {
+          if task == "login" { D2SPageView() }
+          else               { EntityMasterDetailPage() }
+        }
+        .ruleContext(ruleContext)
       }
     #elseif os(watchOS) // TODO: master detail for watchOS?
       public var body: some View {
